@@ -11,7 +11,7 @@
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
-      appId: "a1f151a2-3b46-4487-9368-17a47d2e3dbd",
+      appId: "01262d73-0c05-471d-9df3-69cad7892657",
       notifyButton: { enable: false },
       allowLocalhostAsSecureOrigin: true,
     });
@@ -697,21 +697,6 @@
 <!-- Main App -->
 <div id="appScreen" class="hidden">
 
-<!-- بانر تفعيل الإشعارات — يظهر مرة واحدة بس -->
-<div id="notifBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:linear-gradient(135deg,#1e293b,#334155);padding:14px 16px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);">
-  <div style="display:flex;align-items:center;gap:12px;max-width:400px;margin:0 auto;">
-    <span style="font-size:28px;flex-shrink:0;">🔔</span>
-    <div style="flex:1;">
-      <div style="color:#fff;font-size:13px;font-weight:800;margin-bottom:2px;">فعّل الإشعارات</div>
-      <div style="color:rgba(255,255,255,0.65);font-size:11px;">عشان توصلك إشعارات التأجيل حتى لو التطبيق مغلق</div>
-    </div>
-    <div style="display:flex;gap:8px;flex-shrink:0;">
-      <button onclick="dismissNotifBanner()" style="background:rgba(255,255,255,0.1);border:none;border-radius:8px;padding:8px 12px;color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;font-family:Tahoma,Arial,sans-serif;">لاحقاً</button>
-      <button onclick="enableNotifications()" style="background:linear-gradient(135deg,#5aab7a,#4a7a5e);border:none;border-radius:8px;padding:8px 14px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;font-family:Tahoma,Arial,sans-serif;">تفعيل ✓</button>
-    </div>
-  </div>
-</div>
-
   <!-- Header -->
   <div class="header">
     <div class="header-top">
@@ -1333,7 +1318,6 @@ function initApp() {
     checkEmpNotifications();
     setInterval(() => checkEmpNotifications(), 20000);
     showEmployeeView();
-    setTimeout(() => showNotifBannerIfNeeded(), 2500);
   }
 
   if (currentUser.role === 'admin') {
@@ -1341,7 +1325,6 @@ function initApp() {
     showAdminSummary();
     loadAdminNotifsFromSheet();
     setInterval(() => loadAdminNotifsFromSheet(), 20000);
-    setTimeout(() => showNotifBannerIfNeeded(), 2500);
   }
 }
 
@@ -2378,37 +2361,6 @@ function closeNotifPanel(e) {
 // ====== OneSignal Push Notifications ======
 
 // Subscribe user to OneSignal and tag them with their username
-// ===== بانر تفعيل الإشعارات =====
-function showNotifBannerIfNeeded() {
-  // لو المستخدم وافق قبل كده — ماتعرضوش
-  if (Notification.permission === 'granted') return;
-  // لو المستخدم رفض قبل كده — ماتعرضوش
-  if (safeStorage.getItem('notifBannerDismissed') === '1') return;
-  const banner = document.getElementById('notifBanner');
-  if (banner) banner.style.display = 'block';
-}
-
-async function enableNotifications() {
-  const banner = document.getElementById('notifBanner');
-  if (banner) banner.style.display = 'none';
-  safeStorage.setItem('notifBannerDismissed', '1');
-  try {
-    // طلب الإذن من ضغطة المستخدم مباشرة — المتصفح هيقبله
-    const perm = await Notification.requestPermission();
-    if (perm === 'granted') {
-      // سجّل في OneSignal
-      if (currentUser) oneSignalSubscribe(currentUser.username, currentUser.role);
-      showNotification('✅ تم تفعيل الإشعارات\nهتوصلك إشعارات التأجيل حتى لو التطبيق مغلق', 'notif_enabled');
-    }
-  } catch(e) {}
-}
-
-function dismissNotifBanner() {
-  const banner = document.getElementById('notifBanner');
-  if (banner) banner.style.display = 'none';
-  // مش بنحفظ dismissed — هيرجع يسأل بعد كده
-}
-
 async function oneSignalSubscribe(username, role) {
   try {
     // Wait for OneSignal to be ready properly
@@ -2449,10 +2401,10 @@ async function sendOneSignalPush(targetUsername, title, body) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic os_v2_app_a1f151a2-3b46-4487-9368-17a47d2e3dbd'
+        'Authorization': 'Basic os_v2_app_01262d73-0c05-471d-9df3-69cad7892657'
       },
       body: JSON.stringify({
-        app_id: 'a1f151a2-3b46-4487-9368-17a47d2e3dbd',
+        app_id: '01262d73-0c05-471d-9df3-69cad7892657',
         filters: [
           { field: "tag", key: "username", relation: "=", value: targetUsername }
         ],
